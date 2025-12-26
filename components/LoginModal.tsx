@@ -118,6 +118,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                     onChange={(e) => setUsername(e.target.value)}
                                     placeholder="Enter admin ID"
                                     className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                    autoComplete="username"
                                     required
                                 />
                             </div>
@@ -132,6 +133,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter password"
                                     className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                                    autoComplete="current-password"
                                     required
                                 />
                             </div>

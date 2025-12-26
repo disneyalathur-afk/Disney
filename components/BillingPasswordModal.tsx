@@ -60,6 +60,7 @@ const BillingPasswordModal: React.FC<BillingPasswordModalProps> = ({ isOpen, onS
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white py-3 px-4 text-center text-xl tracking-widest focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="••••••"
+                            autoComplete="current-password"
                             autoFocus
                             required
                         />
