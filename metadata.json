@@ -1,0 +1,5 @@
+{
+  "name": "Disney - Retail Point of Sale",
+  "description": "A modern, responsive Point of Sale application for retail with billing, inventory management, and sales tracking. Features a persistent local database simulation for immediate testing.",
+  "requestFramePermissions": []
+}
