@@ -33,8 +33,8 @@ export const InvoiceReceipt: React.FC<InvoiceReceiptProps> = ({
           <div>
             <h1 className="text-3xl font-bold text-slate-900 mb-2">Disney</h1>
             <div className="text-sm text-slate-500 space-y-0.5">
-              <p>123 Victory Lane, Champion City</p>
-              <p>555-0101</p>
+              <p>Al Rayan Complex Moochikkad, Alathur</p>
+              <p>8891410945</p>
             </div>
           </div>
           <div className="text-right">
