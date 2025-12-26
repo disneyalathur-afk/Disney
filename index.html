@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="apple-touch-icon" href="/Disney/apple-touch-icon.png" />
+  <title>Disney - Retail System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {}
+      }
+    }
+  </script>
+  <script>
+    // Initialize theme before content loads to avoid flicker
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Safety overrides for printing */
+    @media print {
+      @page {
+        margin: 0.5cm;
+        /* Hide browser headers and footers */
+      }
+
+      body,
+      #root {
+        background-color: white !important;
+        color: black !important;
+      }
+
+      /* Ensure specific dark mode classes don't bleed through */
+      * {
+        text-shadow: none !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.11.0"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/Disney/assets/index-BVhZImfM.js"></script>
+  <link rel="stylesheet" crossorigin href="/Disney/assets/index-B9nSs3WW.css">
+<link rel="manifest" href="/Disney/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/Disney/registerSW.js"></script></head>
+
+<body class="bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
+  <div id="root"></div>
+</body>
+
+</html>
