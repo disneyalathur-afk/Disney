@@ -31,7 +31,7 @@ export const InvoiceReceipt: React.FC<InvoiceReceiptProps> = ({
         {/* Invoice Header */}
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Disney</h1>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Disni Designs</h1>
             <div className="text-sm text-slate-500 space-y-0.5">
               <p>Al Rayan Complex Moochikkad, Alathur</p>
               <p>8891410945</p>
@@ -110,7 +110,7 @@ export const InvoiceReceipt: React.FC<InvoiceReceiptProps> = ({
         <div className="pt-6 border-t border-slate-100">
           <h4 className="text-sm font-bold text-slate-900 mb-1">Terms & Conditions</h4>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Payment is due immediately. Please make checks payable to: Disney Retail.
+            Payment is due immediately. Please make checks payable to: Disni Designs.
             <br />
             Goods once sold cannot be taken back or exchanged.
           </p>

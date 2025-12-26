@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
                   </svg>
                 </div>
                 <div>
-                  <span className="font-bold text-xl tracking-tight text-slate-800 dark:text-white block leading-tight">Disney</span>
+                  <span className="font-bold text-xl tracking-tight text-slate-800 dark:text-white block leading-tight">Disni Designs</span>
                   <span className="text-[9px] text-slate-400 dark:text-slate-500 block -mt-0.5">powered by <span className="font-medium text-blue-500">AstriOrb</span></span>
                 </div>
               </div>

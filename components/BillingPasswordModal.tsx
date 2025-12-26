@@ -44,7 +44,7 @@ const BillingPasswordModal: React.FC<BillingPasswordModalProps> = ({ isOpen, onS
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
-                    <h2 className="text-xl font-bold text-white">Disney POS</h2>
+                    <h2 className="text-xl font-bold text-white">Disni Designs POS</h2>
                     <p className="text-blue-200 text-sm mt-1">Enter password to continue</p>
                 </div>
 

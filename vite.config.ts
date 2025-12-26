@@ -17,9 +17,9 @@ export default defineConfig(({ mode }) => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
         manifest: {
-          name: 'Disney Trophy & Gifts POS',
-          short_name: 'Disney POS',
-          description: 'Point of Sale system for Disney Trophy & Gifts',
+          name: 'Disni Designs POS',
+          short_name: 'Disni POS',
+          description: 'Point of Sale system for Disni Designs Trophy & Gifts',
           theme_color: '#2563eb',
           background_color: '#0f172a',
           display: 'standalone',

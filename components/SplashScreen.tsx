@@ -33,7 +33,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
 
             {/* Brand Name */}
             <h1 className="text-5xl font-bold text-white mb-3 tracking-tight animate-slide-up">
-                Disney
+                Disni Designs
             </h1>
             <p className="text-blue-200 text-lg font-medium animate-slide-up" style={{ animationDelay: '0.1s' }}>
                 Trophy & Gifts
