@@ -54,7 +54,7 @@ const Navbar: React.FC = () => {
       <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
 
       <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50 print:hidden transition-colors duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 lg:px-6">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               {/* Logo */}

@@ -35,9 +35,14 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
             <h1 className="text-5xl font-bold text-white mb-3 tracking-tight animate-slide-up">
                 Disni Designs
             </h1>
-            <p className="text-blue-200 text-sm font-medium animate-slide-up text-center max-w-xs" style={{ animationDelay: '0.1s' }}>
-                Trophy | Flex | Banner | Vinyl | Laser & Cloth Printing
-            </p>
+            <div className="animate-slide-up text-center" style={{ animationDelay: '0.1s' }}>
+                <p className="text-blue-200 text-sm font-medium">
+                    Trophy | Flex | Banner | Vinyl
+                </p>
+                <p className="text-blue-200 text-sm font-medium mt-0.5">
+                    Laser & Cloth Printing
+                </p>
+            </div>
 
             {/* Loading Indicator */}
             <div className="mt-12 flex space-x-2">

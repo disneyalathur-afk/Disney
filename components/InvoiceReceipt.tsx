@@ -31,7 +31,8 @@ export const InvoiceReceipt: React.FC<InvoiceReceiptProps> = ({
         {/* Invoice Header */}
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Disni Designs</h1>
+            <h1 className="text-3xl font-bold text-slate-900 mb-1">Disni Designs</h1>
+            <p className="text-xs text-slate-600 mb-2">Trophy | Flex | Banner | Vinyl | Laser & Cloth Printing</p>
             <div className="text-sm text-slate-500 space-y-0.5">
               <p>Al Rayan Complex Moochikkad, Alathur</p>
               <p>8891410945</p>
