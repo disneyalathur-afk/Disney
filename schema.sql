@@ -20,6 +20,9 @@ CREATE TABLE IF NOT EXISTS products (
 -- Add cost_price column if table already exists (for existing databases)
 ALTER TABLE products ADD COLUMN IF NOT EXISTS cost_price DECIMAL(10, 2) DEFAULT 0;
 
+-- Add wholesale_price column for bulk order pricing
+ALTER TABLE products ADD COLUMN IF NOT EXISTS wholesale_price DECIMAL(10, 2) DEFAULT 0;
+
 -- Customers table
 CREATE TABLE IF NOT EXISTS customers (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

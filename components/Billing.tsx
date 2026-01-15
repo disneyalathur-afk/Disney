@@ -13,9 +13,9 @@ const Billing: React.FC = () => {
   const [discountInput, setDiscountInput] = useState<string>('');
   const [customerName, setCustomerName] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<'CASH' | 'CARD' | 'UPI'>('CASH');
+  const [pricingMode, setPricingMode] = useState<'retail' | 'wholesale'>('retail');
   const [showPreview, setShowPreview] = useState(false);
   const [lastAddedId, setLastAddedId] = useState<string | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [recentProductIds, setRecentProductIds] = useState<string[]>(() => {
     // Load from localStorage on init
     const saved = localStorage.getItem('disney_recent_products');
@@ -67,6 +67,13 @@ const Billing: React.FC = () => {
   const addToCart = (product: Product) => {
     if (product.stock_quantity === 0) return;
 
+    // Get the appropriate price based on pricing mode
+    // Only use wholesale price if it's actually set (> 0)
+    const hasWholesale = product.wholesale_price && product.wholesale_price > 0;
+    const activePrice = pricingMode === 'wholesale' && hasWholesale
+      ? product.wholesale_price
+      : product.price;
+
     // Trigger animation
     setLastAddedId(product.id);
     setTimeout(() => setLastAddedId(null), 300);
@@ -86,7 +93,8 @@ const Billing: React.FC = () => {
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      // Add new item with the current pricing mode's price
+      return [...prev, { ...product, price: activePrice, quantity: 1 }];
     });
   };
 
@@ -208,6 +216,43 @@ const Billing: React.FC = () => {
         <div className="flex-1 flex flex-col bg-slate-100 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 h-full overflow-hidden transition-colors duration-200">
           {/* Search & Filter Header */}
           <div className="p-4 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm z-10 flex flex-col gap-4 transition-colors duration-200">
+            {/* Pricing Mode Toggle */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Pricing:</span>
+                <div className="flex rounded-lg overflow-hidden border border-slate-200 dark:border-slate-600">
+                  <button
+                    onClick={() => { setPricingMode('retail'); setCart([]); }}
+                    className={`px-4 py-2 text-sm font-semibold transition-all flex items-center gap-1.5 ${pricingMode === 'retail'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600'
+                      }`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    Retail
+                  </button>
+                  <button
+                    onClick={() => { setPricingMode('wholesale'); setCart([]); }}
+                    className={`px-4 py-2 text-sm font-semibold transition-all flex items-center gap-1.5 ${pricingMode === 'wholesale'
+                      ? 'bg-amber-600 text-white'
+                      : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600'
+                      }`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    Wholesale
+                  </button>
+                </div>
+              </div>
+              {pricingMode === 'wholesale' && (
+                <span className="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-bold rounded-full animate-pulse">
+                  BULK PRICING ACTIVE
+                </span>
+              )}
+            </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -248,20 +293,30 @@ const Billing: React.FC = () => {
                 Recently Added
               </h3>
               <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                {recentProducts.map(product => (
-                  <button
-                    key={product.id}
-                    onClick={() => addToCart(product)}
-                    disabled={product.stock_quantity === 0}
-                    className={`flex-shrink-0 px-3 py-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-left transition-all ${product.stock_quantity > 0
-                      ? 'hover:border-blue-400 hover:shadow-sm cursor-pointer'
-                      : 'opacity-50 cursor-not-allowed'
-                      }`}
-                  >
-                    <div className="text-xs font-medium text-slate-800 dark:text-white truncate max-w-[120px]">{product.name}</div>
-                    <div className="text-xs text-blue-600 dark:text-blue-400 font-bold">₹{product.price}</div>
-                  </button>
-                ))}
+                {recentProducts.map(product => {
+                  const hasRecentWholesale = product.wholesale_price && product.wholesale_price > 0;
+                  const recentDisplayPrice = pricingMode === 'wholesale' && hasRecentWholesale
+                    ? product.wholesale_price
+                    : product.price;
+                  return (
+                    <button
+                      key={product.id}
+                      onClick={() => addToCart(product)}
+                      disabled={product.stock_quantity === 0}
+                      className={`flex-shrink-0 px-3 py-2 bg-white dark:bg-slate-800 rounded-lg border text-left transition-all ${pricingMode === 'wholesale' ? 'border-amber-200 dark:border-amber-700' : 'border-slate-200 dark:border-slate-700'
+                        } ${product.stock_quantity > 0
+                          ? 'hover:border-blue-400 hover:shadow-sm cursor-pointer'
+                          : 'opacity-50 cursor-not-allowed'
+                        }`}
+                    >
+                      <div className="text-xs font-medium text-slate-800 dark:text-white truncate max-w-[120px]">{product.name}</div>
+                      <div className={`text-xs font-bold ${pricingMode === 'wholesale' && hasRecentWholesale
+                        ? 'text-amber-600 dark:text-amber-400'
+                        : 'text-blue-600 dark:text-blue-400'
+                        }`}>₹{recentDisplayPrice}</div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -271,11 +326,17 @@ const Billing: React.FC = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredProducts.map(product => {
                 const inStock = product.stock_quantity > 0;
+                const hasWholesalePrice = product.wholesale_price && product.wholesale_price > 0;
+                const displayPrice = pricingMode === 'wholesale' && hasWholesalePrice
+                  ? product.wholesale_price
+                  : product.price;
+
                 return (
                   <div
                     key={product.id}
                     onClick={() => inStock && addToCart(product)}
-                    className={`relative group bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between transition-all duration-200 
+                    className={`relative group bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border flex flex-col justify-between transition-all duration-200 
+                      ${pricingMode === 'wholesale' ? 'border-amber-200 dark:border-amber-800' : 'border-slate-200 dark:border-slate-700'}
                       ${inStock
                         ? 'cursor-pointer hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-500 hover:-translate-y-1 active:scale-[0.98]'
                         : 'opacity-75 cursor-not-allowed bg-slate-50 dark:bg-slate-800/50'}`}
@@ -285,12 +346,27 @@ const Billing: React.FC = () => {
                         <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                           {product.sku}
                         </span>
+                        {pricingMode === 'wholesale' && hasWholesalePrice && (
+                          <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400">
+                            BULK
+                          </span>
+                        )}
                       </div>
                       <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-sm leading-tight line-clamp-2 h-10">{product.name}</h3>
                     </div>
 
                     <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-700">
-                      <span className="text-lg font-bold text-slate-900 dark:text-white">₹{product.price.toFixed(2)}</span>
+                      <div className="flex flex-col">
+                        <span className={`text-lg font-bold ${pricingMode === 'wholesale' && hasWholesalePrice
+                          ? 'text-amber-600 dark:text-amber-400'
+                          : 'text-slate-900 dark:text-white'
+                          }`}>
+                          ₹{displayPrice.toFixed(2)}
+                        </span>
+                        {pricingMode === 'wholesale' && hasWholesalePrice && (
+                          <span className="text-[10px] text-slate-400 line-through">₹{product.price.toFixed(2)}</span>
+                        )}
+                      </div>
                       <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase ${inStock ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                         }`}>
                         {inStock ? `${product.stock_quantity} Left` : 'Sold Out'}
@@ -319,15 +395,32 @@ const Billing: React.FC = () => {
         </div>
 
         {/* RIGHT SIDE: Cart */}
-        <div className="w-full md:w-[420px] bg-white dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700 flex flex-col h-full shadow-2xl z-20 transition-colors duration-200">
-          <div className="p-5 border-b border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 transition-colors">
-            <h2 className="font-bold text-xl text-slate-800 dark:text-white flex items-center">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg mr-3">
-                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
+        <div className={`w-full md:w-[420px] bg-white dark:bg-slate-800 border-l flex flex-col h-full shadow-2xl z-20 transition-colors duration-200 ${pricingMode === 'wholesale' ? 'border-amber-300 dark:border-amber-700' : 'border-slate-200 dark:border-slate-700'
+          }`}>
+          <div className={`p-5 border-b transition-colors ${pricingMode === 'wholesale'
+            ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800'
+            : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700'
+            }`}>
+            <h2 className="font-bold text-xl text-slate-800 dark:text-white flex items-center justify-between">
+              <div className="flex items-center">
+                <div className={`p-2 rounded-lg mr-3 ${pricingMode === 'wholesale'
+                  ? 'bg-amber-100 dark:bg-amber-900/40'
+                  : 'bg-blue-100 dark:bg-blue-900/40'
+                  }`}>
+                  <svg className={`w-5 h-5 ${pricingMode === 'wholesale'
+                    ? 'text-amber-600 dark:text-amber-400'
+                    : 'text-blue-600 dark:text-blue-400'
+                    }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                {pricingMode === 'wholesale' ? 'Wholesale Order' : 'Current Order'}
               </div>
-              Current Order
+              {pricingMode === 'wholesale' && (
+                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/50 px-2 py-1 rounded">
+                  BULK
+                </span>
+              )}
             </h2>
           </div>
 

@@ -3,14 +3,14 @@ import { Product, Sale, SaleItem, Customer, Return, StockPurchase } from '../typ
 
 // Initial seed data for first-time setup
 const INITIAL_PRODUCTS: Omit<Product, 'id'>[] = [
-  { name: 'Golden Cricket Championship Cup (Large)', price: 1250.00, stock_quantity: 20, sku: 'TRP-CKT-001', category: 'Sports' },
-  { name: 'Crystal Star Excellence Award', price: 850.00, stock_quantity: 15, sku: 'TRP-CRP-002', category: 'Corporate' },
-  { name: 'Wooden Plaque - Best Employee', price: 450.00, stock_quantity: 50, sku: 'TRP-WDN-003', category: 'Wooden' },
-  { name: 'Silver Football Runner Up Cup', price: 950.00, stock_quantity: 10, sku: 'TRP-FBL-004', category: 'Sports' },
-  { name: 'Academic Achievement Shield', price: 350.00, stock_quantity: 100, sku: 'TRP-ACD-005', category: 'Academic' },
-  { name: 'Fiber Gold Star Trophy', price: 150.00, stock_quantity: 200, sku: 'TRP-FIB-006', category: 'Fiber' },
-  { name: 'Brass Medals (Set of 3)', price: 275.00, stock_quantity: 60, sku: 'MDL-BRS-007', category: 'Medals' },
-  { name: 'Glass Momentum with Box', price: 600.00, stock_quantity: 30, sku: 'TRP-GLS-008', category: 'Corporate' },
+  { name: 'Golden Cricket Championship Cup (Large)', price: 1250.00, wholesale_price: 950.00, stock_quantity: 20, sku: 'TRP-CKT-001', category: 'Sports' },
+  { name: 'Crystal Star Excellence Award', price: 850.00, wholesale_price: 650.00, stock_quantity: 15, sku: 'TRP-CRP-002', category: 'Corporate' },
+  { name: 'Wooden Plaque - Best Employee', price: 450.00, wholesale_price: 350.00, stock_quantity: 50, sku: 'TRP-WDN-003', category: 'Wooden' },
+  { name: 'Silver Football Runner Up Cup', price: 950.00, wholesale_price: 750.00, stock_quantity: 10, sku: 'TRP-FBL-004', category: 'Sports' },
+  { name: 'Academic Achievement Shield', price: 350.00, wholesale_price: 280.00, stock_quantity: 100, sku: 'TRP-ACD-005', category: 'Academic' },
+  { name: 'Fiber Gold Star Trophy', price: 150.00, wholesale_price: 110.00, stock_quantity: 200, sku: 'TRP-FIB-006', category: 'Fiber' },
+  { name: 'Brass Medals (Set of 3)', price: 275.00, wholesale_price: 200.00, stock_quantity: 60, sku: 'MDL-BRS-007', category: 'Medals' },
+  { name: 'Glass Momentum with Box', price: 600.00, wholesale_price: 480.00, stock_quantity: 30, sku: 'TRP-GLS-008', category: 'Corporate' },
 ];
 
 export const dataService = {

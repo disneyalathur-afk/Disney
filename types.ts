@@ -2,6 +2,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  wholesale_price?: number;
   cost_price?: number;
   stock_quantity: number;
   sku: string;

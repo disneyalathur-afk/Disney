@@ -10,14 +10,16 @@ const Inventory: React.FC = () => {
     name: '',
     category: '',
     price: '',
+    wholesale_price: '',
     cost_price: '',
     stock_quantity: ''
   });
 
   // State for Inline Editing
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editValues, setEditValues] = useState<{ price: string; stock_quantity: string }>({
+  const [editValues, setEditValues] = useState<{ price: string; wholesale_price: string; stock_quantity: string }>({
     price: '',
+    wholesale_price: '',
     stock_quantity: ''
   });
 
@@ -59,11 +61,12 @@ const Inventory: React.FC = () => {
       sku: autoSku,
       category: formData.category || 'General',
       price: parseFloat(formData.price),
+      wholesale_price: formData.wholesale_price ? parseFloat(formData.wholesale_price) : 0,
       cost_price: formData.cost_price ? parseFloat(formData.cost_price) : 0,
       stock_quantity: parseInt(formData.stock_quantity)
     });
 
-    setFormData({ name: '', category: '', price: '', cost_price: '', stock_quantity: '' });
+    setFormData({ name: '', category: '', price: '', wholesale_price: '', cost_price: '', stock_quantity: '' });
     loadProducts();
   };
 
@@ -71,18 +74,20 @@ const Inventory: React.FC = () => {
     setEditingId(product.id);
     setEditValues({
       price: product.price.toString(),
+      wholesale_price: (product.wholesale_price || 0).toString(),
       stock_quantity: product.stock_quantity.toString()
     });
   };
 
   const cancelEditing = () => {
     setEditingId(null);
-    setEditValues({ price: '', stock_quantity: '' });
+    setEditValues({ price: '', wholesale_price: '', stock_quantity: '' });
   };
 
   const saveEdit = async (id: string) => {
     await dataService.updateProduct(id, {
       price: parseFloat(editValues.price),
+      wholesale_price: parseFloat(editValues.wholesale_price) || 0,
       stock_quantity: parseInt(editValues.stock_quantity)
     });
     setEditingId(null);
@@ -128,8 +133,8 @@ const Inventory: React.FC = () => {
           </svg>
           Add New Trophy
         </h2>
-        <form onSubmit={handleAddSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-          <div className="md:col-span-3">
+        <form onSubmit={handleAddSubmit} className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-4 items-end">
+          <div className="md:col-span-3 lg:col-span-2">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Trophy Name</label>
             <input
               type="text"
@@ -141,7 +146,7 @@ const Inventory: React.FC = () => {
             />
           </div>
           {/* SKU is auto-generated based on category */}
-          <div className="md:col-span-2">
+          <div className="md:col-span-3 lg:col-span-2">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Type (Category)</label>
             <input
               type="text"
@@ -151,8 +156,8 @@ const Inventory: React.FC = () => {
               onChange={e => setFormData({ ...formData, category: e.target.value })}
             />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Price (₹)</label>
+          <div className="md:col-span-2 lg:col-span-2">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Retail Price (₹)</label>
             <input
               type="number"
               required
@@ -164,20 +169,20 @@ const Inventory: React.FC = () => {
               onChange={e => setFormData({ ...formData, price: e.target.value })}
             />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Cost Price (₹)</label>
+          <div className="md:col-span-2 lg:col-span-2">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Wholesale (₹)</label>
             <input
               type="number"
               min="0"
               step="0.01"
               className="w-full rounded-md border-slate-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm px-3 py-2 border"
-              placeholder="For profit tracking"
-              value={formData.cost_price}
-              onChange={e => setFormData({ ...formData, cost_price: e.target.value })}
+              placeholder="Bulk price"
+              value={formData.wholesale_price}
+              onChange={e => setFormData({ ...formData, wholesale_price: e.target.value })}
             />
           </div>
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Initial Stock</label>
+          <div className="md:col-span-2 lg:col-span-2">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Stock</label>
             <input
               type="number"
               required
@@ -188,11 +193,14 @@ const Inventory: React.FC = () => {
               onChange={e => setFormData({ ...formData, stock_quantity: e.target.value })}
             />
           </div>
-          <div className="md:col-span-1">
+          <div className="md:col-span-6 lg:col-span-2">
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition-colors flex justify-center"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition-colors flex items-center justify-center"
             >
+              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
               Add
             </button>
           </div>
@@ -207,7 +215,8 @@ const Inventory: React.FC = () => {
               <tr>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Product Info</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Type</th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Price (₹)</th>
+                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Retail (₹)</th>
+                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Wholesale (₹)</th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Stock</th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">Actions</th>
               </tr>
@@ -237,7 +246,7 @@ const Inventory: React.FC = () => {
                       <span className="text-sm text-slate-600 dark:text-slate-300">{product.category}</span>
                     </td>
 
-                    {/* Price Column */}
+                    {/* Retail Price Column */}
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       {isEditing ? (
                         <input
@@ -249,6 +258,23 @@ const Inventory: React.FC = () => {
                         />
                       ) : (
                         <span className="text-sm font-semibold text-slate-900 dark:text-white">₹{product.price.toFixed(2)}</span>
+                      )}
+                    </td>
+
+                    {/* Wholesale Price Column */}
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      {isEditing ? (
+                        <input
+                          type="number"
+                          step="0.01"
+                          className="w-24 text-right rounded border-slate-300 dark:border-slate-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm py-1 px-2 border"
+                          value={editValues.wholesale_price}
+                          onChange={(e) => setEditValues({ ...editValues, wholesale_price: e.target.value })}
+                        />
+                      ) : (
+                        <span className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                          {product.wholesale_price ? `₹${product.wholesale_price.toFixed(2)}` : '-'}
+                        </span>
                       )}
                     </td>
 
@@ -311,7 +337,7 @@ const Inventory: React.FC = () => {
               })}
               {products.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
+                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
                     No products found in inventory.
                   </td>
                 </tr>
