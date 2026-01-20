@@ -47,6 +47,8 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+          navigateFallback: '/Disney/index.html',
+          navigateFallbackDenylist: [/^\/Disney\/api\//],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
