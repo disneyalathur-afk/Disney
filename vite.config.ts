@@ -24,8 +24,8 @@ export default defineConfig(({ mode }) => {
           background_color: '#0f172a',
           display: 'standalone',
           orientation: 'portrait',
-          scope: '/',
-          start_url: '/',
+          scope: '/Disney/',
+          start_url: '/Disney/',
           icons: [
             {
               src: 'pwa-192x192.png',
