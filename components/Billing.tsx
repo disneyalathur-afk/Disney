@@ -118,6 +118,24 @@ const Billing: React.FC = () => {
     });
   };
 
+  const setQuantityDirectly = (productId: string, value: string) => {
+    const newQty = parseInt(value, 10);
+    if (isNaN(newQty) || newQty < 1) {
+      // Allow empty input while typing, but don't update cart with invalid value
+      if (value === '') {
+        setCart(prev => prev.map(item =>
+          item.id === productId ? { ...item, quantity: 1 } : item
+        ));
+      }
+      return;
+    }
+    const original = products.find(p => p.id === productId);
+    const clampedQty = original ? Math.min(newQty, original.stock_quantity) : newQty;
+    setCart(prev => prev.map(item =>
+      item.id === productId ? { ...item, quantity: clampedQty } : item
+    ));
+  };
+
   const subTotal = useMemo(() => {
     return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   }, [cart]);
@@ -455,7 +473,15 @@ const Billing: React.FC = () => {
                       >
                         -
                       </button>
-                      <span className="w-8 text-center text-sm font-semibold text-slate-800 dark:text-white">{item.quantity}</span>
+                      <input
+                        type="number"
+                        min="1"
+                        max={products.find(p => p.id === item.id)?.stock_quantity || 999}
+                        value={item.quantity}
+                        onChange={(e) => setQuantityDirectly(item.id, e.target.value)}
+                        onFocus={(e) => e.target.select()}
+                        className="w-12 text-center text-sm font-semibold text-slate-800 dark:text-white bg-transparent border-none outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
                       <button
                         onClick={() => updateQuantity(item.id, 1)}
                         className="px-3 py-1.5 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 active:bg-slate-300 dark:active:bg-slate-500 transition-colors"
